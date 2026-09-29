@@ -1,0 +1,10 @@
+[
+  {
+    "id": "4f87ec06-4abe-4f78-99a1-d826c2bc865f",
+    "name": "Paras Varankar",
+    "email": "parasvarankar235@gmail.com",
+    "passwordSalt": "2eeb9c2a82c9eac9ff54b26d479533f3",
+    "passwordHash": "b330e87be06cd7f2194bbcf7616dce128c98b008a8d340e119ec6d7121cfc11ca5f9a32b7a926e3d58516e5326655e1d668d7883bc5c55d291ddec93dd9b9408",
+    "createdAt": "2026-09-29T15:31:06.728Z"
+  }
+]

@@ -5,10 +5,32 @@ import { useState } from "react";
 
 export default function LoginPage() {
     const [toastMessage, setToastMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        setToastMessage("Login is not connected to an authentication service yet.");
+        setIsSubmitting(true);
+
+        try {
+            const formData = new FormData(event.currentTarget);
+            const response = await fetch("/api/auth", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "login",
+                    email: formData.get("email"),
+                    password: formData.get("password"),
+                }),
+            });
+            const result = await response.json();
+
+            if (!response.ok) throw new Error(result.error);
+            setToastMessage(`Welcome back, ${result.user.name}.`);
+        } catch (error) {
+            setToastMessage(error.message || "Unable to log in.");
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -28,6 +50,7 @@ export default function LoginPage() {
 
                 <form onSubmit={handleSubmit}>
                     <input
+                        name="email"
                         type="email"
                         placeholder="Email"
                         required
@@ -35,14 +58,15 @@ export default function LoginPage() {
                     />
 
                     <input
+                        name="password"
                         type="password"
                         placeholder="Password"
                         required
                         className="mt-4 w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 outline-none"
                     />
 
-                    <button type="submit" className="mt-6 w-full rounded-xl bg-violet-600 py-3 font-semibold">
-                        Login
+                    <button type="submit" disabled={isSubmitting} className="mt-6 w-full rounded-xl bg-violet-600 py-3 font-semibold disabled:cursor-wait disabled:opacity-60">
+                        {isSubmitting ? "Logging In..." : "Login"}
                     </button>
                 </form>
 
